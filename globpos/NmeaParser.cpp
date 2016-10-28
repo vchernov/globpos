@@ -24,7 +24,7 @@ void NmeaParser::parse(char letter) {
     if (letter == '$') {
         isStart = true;
         if (state != S_SOS) {
-#ifdef NMEA_PARSER_PRINT_ERRORS
+#ifdef GLOBPOS_PRINT_ERRORS
             fprintf(stderr, "Unexpected start of sentence at state %d\n", state);
 #endif
             state = S_SOS;
@@ -54,7 +54,7 @@ void NmeaParser::parse(char letter) {
                 state = S_ADDRESS;
                 clear = true;
             } else {
-#ifdef NMEA_PARSER_PRINT_ERRORS
+#ifdef GLOBPOS_PRINT_ERRORS
                 fprintf(stderr, "Wrong starting character %d\n", (int)letter);
 #endif
             }
@@ -96,7 +96,7 @@ void NmeaParser::parse(char letter) {
             break;
         case S_END:
             if (!isEnd) {
-#ifdef NMEA_PARSER_PRINT_ERRORS
+#ifdef GLOBPOS_PRINT_ERRORS
                 fprintf(stderr, "Wrong ending character %d\n", (int)letter);
 #endif
             }
@@ -120,7 +120,7 @@ void NmeaParser::parse(char letter) {
 
     if (isEnd) {
         if (state != S_END) {
-#ifdef NMEA_PARSER_PRINT_ERRORS
+#ifdef GLOBPOS_PRINT_ERRORS
             fprintf(stderr, "Unexpected end of sentence at state %d\n", state);
 #endif
         }
@@ -215,7 +215,7 @@ void NmeaParser::commitCurrentSentence() {
     completeSentences.push_back(destSentence);
 }
 
-const SentenceContainer& NmeaParser::getSentences() const {
+const std::vector<std::shared_ptr<NmeaSentence>>& NmeaParser::getSentences() const {
     return completeSentences;
 }
 

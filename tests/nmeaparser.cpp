@@ -3,6 +3,8 @@
 #include <iostream>
 #include <memory>
 
+#include "../globpos/gpgga.h"
+
 using namespace globpos;
 
 int main(int argc, char** argv) {
@@ -28,6 +30,14 @@ int main(int argc, char** argv) {
         parser->parse(buffer, bytesRead);
 
         for (const auto& sentence : parser->getSentences()) {
+            std::cout << sentence->address << std::endl;
+
+            // GPS coordinates
+            if (sentence->address == "GPGGA") {
+                GlobPosDegMin pos;
+                if (parseGPGGA(sentence.get(), pos)) {
+                }
+            }
         }
         parser->clearSentences();
     }

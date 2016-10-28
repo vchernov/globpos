@@ -1,6 +1,8 @@
 #ifndef GLOBPOS_NMEAPARSER_H
 #define GLOBPOS_NMEAPARSER_H
 
+#include <memory>
+
 #include "settings.h"
 #include "NmeaSentence.h"
 
@@ -22,7 +24,7 @@ public:
     void parse(char);
     void parse(const char* buffer, size_t length);
 
-    const SentenceContainer& getSentences() const;
+    const std::vector<std::shared_ptr<NmeaSentence>>& getSentences() const;
     void clearSentences();
 
 private:
@@ -59,7 +61,7 @@ private:
     bool verifyCurrentSentence();
     void commitCurrentSentence();
 
-    SentenceContainer completeSentences;
+    std::vector<std::shared_ptr<NmeaSentence>> completeSentences;
 
     State state;
 
