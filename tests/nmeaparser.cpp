@@ -1,7 +1,7 @@
 #include "../globpos/NmeaParser.h"
 
 #include <iostream>
-#include <memory>
+#include <iomanip>
 
 #include "../globpos/gpgga.h"
 
@@ -21,6 +21,9 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    std::chrono::time_point<std::chrono::system_clock> recordDate;
+    parseDateTime("2016.10.29 00:00:00", recordDate);
+
     auto parser = std::make_unique<NmeaParser>();
 
     const size_t bufferLength = 1024;
@@ -30,14 +33,19 @@ int main(int argc, char** argv) {
         parser->parse(buffer, bytesRead);
 
         for (const auto& sentence : parser->getSentences()) {
-            std::cout << sentence->address << std::endl;
+            std::cout << sentence->address;
 
             // GPS coordinates
             if (sentence->address == "GPGGA") {
                 GlobPosDegMin pos;
+                pos.timestamp = recordDate;
                 if (parseGPGGA(sentence.get(), pos)) {
+                    time_t t = std::chrono::system_clock::to_time_t(pos.timestamp);
+                    std::cout << " (" << std::put_time(std::gmtime(&t), "%Y.%m.%d %H:%M:%S") << ")";
                 }
             }
+
+            std::cout << std::endl;
         }
         parser->clearSentences();
     }

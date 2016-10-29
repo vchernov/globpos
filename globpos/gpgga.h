@@ -15,6 +15,9 @@ bool parseLatitude(const std::string& str, GpsCoordDegMin& coord);
 // parses longitude from string
 bool parseLongitude(const std::string& str, GpsCoordDegMin& coord);
 
+bool parseDateTime(const char* str, std::chrono::time_point<std::chrono::system_clock>& timestamp);
+bool parseTime(const char* str, std::chrono::time_point<std::chrono::system_clock>& timestamp);
+
 }
 
 #endif //GLOBPOS_GPGGA_H
